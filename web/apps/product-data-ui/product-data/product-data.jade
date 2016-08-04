@@ -1,0 +1,38 @@
+block styles
+    link(rel='stylesheet', href='/stylesheets/product.css')
+    link(rel='stylesheet', href='/stylesheets/pd.css')
+
+div.container(ng-controller='ProductDataController as pd')
+    search
+    .row
+        .col-xs-12(ng-show="pd.show ==='globalSku'")
+            h1.pd-header.row {{pd.skuData.style}} - {{pd.skuData.title}}
+            ul.pd-style
+                li.pd-style.row
+                    input(type='checkbox' checked)
+                    i
+                    h2.pd-title Details
+                    div.pd-style
+                        product-details
+                li.pd-style.row
+                    input(type='checkbox' checked)
+                    i
+                    h2.pd-title Clone Tree
+                    div.pd-style
+                        clone-tree
+                li.pd-style.row
+                    input(type='checkbox' checked)
+                    i
+                    h2.pd-title Content
+                    div.pd-style
+                        content
+                li.pd-style.row
+                    input(type='checkbox' checked)
+                    i
+                    h2.pd-title Notes
+                    div.pd-style
+                        notes
+            div.variants.row(ng-controller='VariantController as vc')
+                img(ng-if="pd.showVariants==='loading'" src="../images/loader.gif")
+                variants.col-xs-12(ng-if="pd.showVariants==='read-only'")
+                edit-variants.col-xs-12(ng-if="pd.showVariants==='edit'")

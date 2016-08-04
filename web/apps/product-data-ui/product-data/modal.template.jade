@@ -1,0 +1,23 @@
+.modal-header
+   h3.modal-title Images for {{mc.swatch}}
+.modal-body
+   .row
+      .col-xs-7
+         img(ng-src="{{mc.getUrl(mc.currentImage.urls.large)}}",
+         width="100%", height="100%")
+      .col-xs-5
+         span(ng-repeat="image in mc.images", ng-click="mc.changeCurrentImage(image)")
+            div.pull-left.image-grid.image-grid-hover
+               img.img-thumbnail.center-block(ng-src="{{mc.getUrl(image.urls.small)}}")
+               div.text-center
+                  div(ng-show="image.blurb") {{image.blurb}}
+   hr
+   .row
+      .col-xs-12
+         label(for='description') Report a Problem:
+         textarea.form-control(rows='3', id='description' ng-model='mc.comment')
+   br
+   .row
+      .col-xs-12
+         button.btn.btn-default.pull-right(type='button' ng-click='mc.cancel()', style="margin-left: 5px;") Close
+         button.btn.btn-danger.pull-right(type='button' ng-click='mc.report(mc.comment)') Report

@@ -1,0 +1,231 @@
+.goat-loading-icon {
+    width: 40%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.colorHeader {
+    background: #f2f2f2;
+}
+
+.editorHeader{
+    margin-left:-20pt !important;
+}
+
+.topSearch{
+    position: relative;
+    top: -50%;
+    transform: translateY(70%);
+}
+
+a.accordion-toggle {
+    display: block;
+    padding: 10px  15px;
+}
+
+div.panel-heading {
+    padding: 0;
+}
+
+td.price {
+    max-width: 200px
+}
+
+a.accordion-toggle:hover, .pointer-hover:hover{
+    cursor: pointer;
+}
+
+.searchHeader{
+    margin-top:20pt;
+    margin-left:10pt;
+}
+.headborder{
+    border-bottom: 1px solid #eee;
+}
+
+label.price {
+    display: inline-block;
+    font-weight: normal;
+    text-align: left;
+    width: 90px;
+}
+
+input[type="text"].price {
+    display: inline-block;
+    border: 1px solid #050000;
+    color: #000;
+    text-align: left;
+    width: 90px;
+    height: 22px;
+    padding: 2px;
+}
+
+
+.glyphicon.glyphicon-ok {
+    color: green;
+    font-size: 20px;
+    vertical-align: middle;
+}
+
+.glyphicon.glyphicon-remove {
+    color: red;
+    font-size: 20px;
+    vertical-align: middle;
+}
+
+.glyphicon.glyphicon-warning-sign {
+    color: orange;
+    font-size: 20px;
+    vertical-align: middle;
+}
+
+.glyphicon.glyphicon-ok-sign {
+    color: green;
+    font-size: 25px;
+}
+
+.glyphicon.glyphicon-remove-sign {
+    color: red;
+    font-size: 25px;
+}
+
+.glyphicon.glyphicon-exclamation-sign {
+    color: orange;
+    font-size: 25px;
+}
+
+.slc:focus{
+    background-color: #ccc !important;
+}
+
+.edit-mode-button{
+    height: 26px;
+    margin-left: 5px;
+    text-align: center;
+    line-height: 50%;
+}
+.edit-mode-header{
+    background-color: #DFDFDF; !important;
+}
+
+.edit-mode-header tr:hover td{
+    background-color: transparent !important;
+}
+
+.btn{
+    background-image: none;
+}
+
+.filter-form{
+    width: 15%;
+    height: 26px;
+    margin-left: 5px;
+    text-align: center;
+    line-height: 50%;
+    display: inline;
+}
+
+.break-overflow {
+    word-wrap: break-word;
+
+    -ms-word-break: break-all;
+    word-break: break-all;
+
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
+}
+
+.catalogAssigned {
+    background-color: #dff0d8;
+}
+
+.dropdown-menu li > a:hover,
+.dropdown-menu li > a:focus {
+    color: white;
+    background-image: none;
+    background-color: #428bca;
+}
+
+.catalog-dropdown:hover {
+    background-color: white;
+    border: 1px solid #ccc;
+}
+
+.catalog-dropdown {
+    background-color: white;
+    border: 1px solid #ccc;
+}
+
+ul.img-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+ul.img-list li {
+    display: inline-block;
+    height: 110px;
+    margin: 0 1em 1em 0;
+    position: relative;
+    width: 110px;
+}
+
+span.text-content {
+    background: rgba(0,0,0,0.5);
+    color: white;
+    display: table;
+    height: 110px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 110px;
+    opacity: 0;
+    -webkit-transition: opacity 500ms;
+    -moz-transition: opacity 500ms;
+    -o-transition: opacity 500ms;
+    transition: opacity 500ms;
+}
+
+span.text-content span {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+ul.img-list li:hover span.text-content {
+    opacity: 1;
+}
+
+.alertify-log-success, .alertify-log-error {
+    opacity: .85;
+}
+
+.image-grid{
+    width: 160px;
+    padding: 5px;
+
+}
+
+.image-grid img{
+    border: 0px;
+
+}
+
+.image-grid-hover img:hover{
+    opacity: 0.5;
+
+}.filter-brand-head {
+    height: 34px;
+}
+.bar-search {
+    margin-right:-20px;
+}
+.but-search {
+    margin-left:-20px;
+}
+.search-row {
+    margin-top: 25px;
+}

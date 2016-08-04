@@ -1,0 +1,9 @@
+!.gitkeep
+*.iml
+.DS_Store
+.idea/*
+bower_components/*
+test/coverage/
+logs/*
+node_modules/*
+/web/libs/*

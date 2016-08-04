@@ -1,0 +1,294 @@
+change-summary
+
+.row
+    input.col-xs-2(ng-model="vc.userFilter", type="text", placeholder="Filter Variants (e.g. Blue)")
+    select.filter-form.form-control.selectpicker.col-xs-4(ng-model= "vc.seasonFilter")
+        option(value='') Filter by Season
+        option(ng-repeat = "value in pd.seasons") {{value}}
+    select.filter-form.form-control.selectpicker.col-xs-4(ng-model= "vc.yearFilter")
+        option(value='') Filter by Year
+        option(ng-repeat = "value in vc.years") {{value}}
+    button.edit-mode-button.btn.btn-info.pull-right.col-xs-2(ng-click='pd.changeEditMode()' ng-hide = "pd.showVariants==='loading'") View-Only
+
+br
+
+.row
+    table.table.table-hover.col-xs-12
+        thead
+            tr.row
+                th.col-xs-2 Image/Vendor SKU
+                th.col-xs-2
+                    .row SKU
+                th.col-xs-3
+                    .row
+                        .col-xs-12 Price
+                th.col-xs-1
+                    .row Catalog
+                th.col-xs-1
+                    .row Season
+                th.col-xs-1 QOH
+                th.col-xs-2
+                    .row SO Code
+        tbody.edit-mode-header
+            tr.row
+                td.col-xs-2
+                    input(type="checkbox" ng-model = "vc.checkbox" ng-click="vc.checkAll(vc.checkbox)")
+                td.col-xs-2
+                    .row
+                td.col-xs-3
+                    .row
+                        .col-xs-12
+                            input.form-control(ng-model = "massPercent" type = "text" placeholder = "Percent Change (e.g. 20)" style="width:100%")
+                        .col-xs-12
+                            select.form-control.selectpicker(ng-model= "key" style="margin-top:10px;")
+                                option(value = "clearancePercent") Clearance Percentage
+                                option(value = "salePercent") Sale Percentage
+                                option(value = "gruppoPercent") Gruppo Percentage
+                                option(value = "flashPercent") FlashPercentage
+                td.col-xs-1
+                        .row
+                td.col-xs-1
+                    .row
+                td.col-xs-1
+                td.col-xs-2
+                    .row
+                        span
+                        button.btn.btn-default(ng-click="vc.apply(key, massPercent); massPercent = ''") Apply
+        tbody.pointer-hover(ng-if = "!pd.skuData.isSkuLevel", ng-repeat = "firstSwatch in vc.sortedVariants |orderBy:'mostRecentSeason':true")
+            tr.colorHeader.row(ng-click="firstSwatch.isOpen = !firstSwatch.isOpen" ng-show="(firstSwatch.variants |filter:vc.userFilter | filter: {season: vc.seasonFilter} | filter: {year: vc.yearFilter}).length" )
+                td.col-xs-2(ng-click='$event.stopPropagation()')
+                    input(type="checkbox" ng-model="firstSwatch.check" ng-click="vc.toggleCheckbox(firstSwatch.check, firstSwatch)")
+                    span &nbsp&nbsp
+                    ul.img-list(ng-if='pd.getImage(firstSwatch.identifier)' ng-click='vc.openModal(firstSwatch.variants[0].style, firstSwatch.identifier, pd.getImage(firstSwatch.identifier), pd.images[firstSwatch.identifier])')
+                        li
+                            a
+                                img(ng-src = "{{pd.getImage(firstSwatch.identifier)}}" width='110' height='110')
+                                span.text-content
+                                    span View Images
+                td.col-xs-2(ng-if = " !pd.skuData.axis2.swatch")
+                    .row {{firstSwatch.variants[0].sku.substring(0, firstSwatch.variants[0].sku.lastIndexOf("-"))}}
+                    .row {{firstSwatch.variants[0].axis1Value}}
+                    .row
+                        span Sizes:&nbsp
+                        span.break-overflow(ng-repeat = "variant in firstSwatch.variants| orderBy: vc.convertToSizeValue") {{variant.axis2Value}}
+                            span(ng-show = "!$last") ,&nbsp
+                td.col-xs-2(ng-if = "!pd.skuData.axis1.swatch && pd.skuData.axis2.swatch")
+                    .row {{firstSwatch.variants[0].axis2Value}}
+                    .row
+                        span Colors:&nbsp
+                        span.break-overflow(ng-repeat = "variant in firstSwatch.variants") {{variant.axis1Value}}
+                            span(ng-show = "!$last") ,&nbsp
+                td.col-xs-3
+                    .row
+                        .col-xs-4 WS:&nbsp;&nbsp 
+                        .col-xs-8
+                            span {{firstSwatch.minWSPrice | currency}}&nbsp 
+                            span(ng-show="firstSwatch.minWSPrice != firstSwatch.maxWSPrice") - {{firstSwatch.maxWSPrice | currency}} 
+                    .row
+                        .col-xs-4 Reg:&nbsp;&nbsp 
+                        .col-xs-8
+                            span {{firstSwatch.minPrice | currency}}&nbsp 
+                            span(ng-show="firstSwatch.minPrice != firstSwatch.maxPrice") - {{firstSwatch.maxPrice | currency}} 
+                    .row
+                        .col-xs-4 Sale:&nbsp;&nbsp 
+                        .col-xs-8
+                            span {{firstSwatch.minSPrice | currency}}&nbsp 
+                            span(ng-show="firstSwatch.minSPrice != firstSwatch.maxSPrice") - {{firstSwatch.maxSPrice | currency}}
+                    .row
+                        .col-xs-4 Clearance:&nbsp;&nbsp 
+                        .col-xs-8
+                            span {{firstSwatch.minCPrice | currency}}&nbsp 
+                            span(ng-show="firstSwatch.minCPrice != firstSwatch.maxCPrice") - {{firstSwatch.maxCPrice | currency}} 
+                    .row
+                        .col-xs-4 Gruppo:&nbsp;&nbsp 
+                        .col-xs-8
+                            span {{firstSwatch.minGPrice | currency}}&nbsp 
+                            span(ng-show="firstSwatch.minGPrice != firstSwatch.maxGPrice") - {{firstSwatch.maxGPrice | currency}}
+                    .row
+                        .col-xs-4 Flash:&nbsp;&nbsp 
+                        .col-xs-8
+                            span {{firstSwatch.minFPrice | currency}}&nbsp 
+                            span(ng-show="firstSwatch.minFPrice != firstSwatch.maxFPrice") - {{firstSwatch.maxFPrice | currency}} 
+                td.col-xs-1
+                    .row(ng-repeat="catalogs in firstSwatch.catalogs")
+                        span(ng-if= "catalogs=='competitivecyclist'") cc
+                        span(ng-if="catalogs!='competitivecyclist' ") {{catalogs}}
+                td.col-xs-1
+                    .row(ng-repeat="season in firstSwatch.seasons |orderBy:vc.convertToNumber:true") {{season}}
+                td.col-xs-1 {{firstSwatch.qoh}}
+                td.col-xs-2
+                    .row(ng-repeat="code in firstSwatch.soCode") {{pd.selloutCodes[code]}}
+            tr.row(ng-repeat = "variant in firstSwatch.variants | filter:vc.userFilter | filter: {season: vc.seasonFilter} | filter: {year: vc.yearFilter} | orderBy:'sizing'" ng-if="firstSwatch.isOpen")
+                td.col-xs-2
+                    input(type="checkbox" ng-model="variant.check")
+                    span &nbsp&nbsp
+                    span {{variant.vendorSku}}
+                td.col-xs-2(ng-show = " !pd.skuData.axis2.swatch")
+                    .row {{variant.axis2Value}}
+                td.col-xs-2(ng-show = "!pd.skuData.axis1.swatch && pd.skuData.axis2.swatch")
+                    .row {{variant.axis1Value}}
+                    .row {{variant.sku}}
+                td.col-xs-3
+                    fieldset
+                        div.form-group
+                            .row
+                                .col-xs-4
+                                    label.price WS:&nbsp;&nbsp 
+                                .col-xs-8
+                                    input.price.form-control.slc(type="text", placeholder = "{{variant.offers[0].wholesalePrice | currency}}" ng-model="variant.wholesaleModel" ng-blur="vc.validateFieldChange(variant.sku, 'wholesalePrice', variant.wholesaleModel, variant.offers[0].wholesalePrice, firstSwatch)" id="{{variant.sku + 'wholesalePrice'}}")
+                                    span &nbsp;
+                                    span.glyphicon.glyphicon-ok(ng-if = "!vc.pendingActions.errors[variant.sku].wholesalePrice && !vc.pendingActions.warnings[variant.sku].wholesalePrice && vc.pendingActions.skuActions[variant.sku].wholesalePrice" tooltip = "No Errors" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-warning-sign(ng-if = "vc.pendingActions.warnings[variant.sku].wholesalePrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.warnings[variant.sku].wholesalePrice)}}" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-remove(ng-if = "vc.pendingActions.errors[variant.sku].wholesalePrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.errors[variant.sku].wholesalePrice)}}" tooltip-placement="right")
+                            .row
+                                .col-xs-4
+                                    label.price Reg:&nbsp;&nbsp
+                                .col-xs-8
+                                    input.price.form-control.slc(type="text", placeholder = "{{variant.offers[0].price | currency}}" ng-model="variant.regularModel" ng-blur="vc.validateFieldChange(variant.sku, 'regularPrice', variant.regularModel, variant.offers[0].price, firstSwatch)" id="{{variant.sku + 'regularPrice'}}")
+                                    span &nbsp;
+                                    span.glyphicon.glyphicon-ok(ng-if = "!vc.pendingActions.errors[variant.sku].regularPrice && !vc.pendingActions.warnings[variant.sku].regularPrice && vc.pendingActions.skuActions[variant.sku].regularPrice" tooltip = "No Errors" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-warning-sign(ng-if = "vc.pendingActions.warnings[variant.sku].regularPrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.warnings[variant.sku].regularPrice)}}" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-remove(ng-if = "vc.pendingActions.errors[variant.sku].regularPrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.errors[variant.sku].regularPrice)}}" tooltip-placement="right")
+                            .row
+                                .col-xs-4
+                                    label.price Sale:&nbsp;&nbsp 
+                                .col-xs-8
+                                    input.price.form-control.slc(type="text", placeholder = "{{variant.offers[0].salePrice | currency}}" ng-model="variant.saleModel" ng-blur="vc.validateFieldChange(variant.sku, 'salePrice', variant.saleModel, variant.offers[0].salePrice, firstSwatch)" id="{{variant.sku + 'salePrice'}}")
+                                    span &nbsp;
+                                    span.glyphicon.glyphicon-ok(ng-if = "!vc.pendingActions.errors[variant.sku].salePrice && !vc.pendingActions.warnings[variant.sku].salePrice && vc.pendingActions.skuActions[variant.sku].salePrice" tooltip = "No Errors" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-warning-sign(ng-if = "vc.pendingActions.warnings[variant.sku].salePrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.warnings[variant.sku].salePrice)}}" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-remove(ng-if = "vc.pendingActions.errors[variant.sku].salePrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.errors[variant.sku].salePrice)}}" tooltip-placement="right")
+                            .row
+                                .col-xs-4
+                                    label.price Clearance:&nbsp;&nbsp 
+                                .col-xs-8
+                                    input.price.form-control.slc(type="text", placeholder = "{{variant.offers[0].clearancePrice | currency}}" ng-model="variant.clearanceModel" ng-blur="vc.validateFieldChange(variant.sku, 'clearancePrice', variant.clearanceModel, variant.offers[0].clearancePrice, firstSwatch)" id="{{variant.sku + 'clearancePrice'}}")
+                                    span &nbsp;
+                                    span.glyphicon.glyphicon-ok(ng-if = "!vc.pendingActions.errors[variant.sku].clearancePrice && !vc.pendingActions.warnings[variant.sku].clearancePrice && vc.pendingActions.skuActions[variant.sku].clearancePrice" tooltip = "No Errors" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-warning-sign(ng-if = "vc.pendingActions.warnings[variant.sku].clearancePrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.warnings[variant.sku].clearancePrice)}}" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-remove(ng-if = "vc.pendingActions.errors[variant.sku].clearancePrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.errors[variant.sku].clearancePrice)}}" tooltip-placement="right")
+                            .row
+                                .col-xs-4
+                                    label.price Gruppo:&nbsp;&nbsp 
+                                .col-xs-8
+                                    input.price.form-control.slc(type="text", placeholder = "{{variant.offers[0].gruppoPrice | currency}}" ng-model="variant.gruppoModel" ng-blur="vc.validateFieldChange(variant.sku, 'gruppoPrice', variant.gruppoModel, variant.offers[0].gruppoPrice, firstSwatch)" id="{{variant.sku + 'gruppoPrice'}}")
+                                    span &nbsp;
+                                    span.glyphicon.glyphicon-ok(ng-if = "!vc.pendingActions.errors[variant.sku].gruppoPrice && !vc.pendingActions.warnings[variant.sku].gruppoPrice && vc.pendingActions.skuActions[variant.sku].gruppoPrice" tooltip = "No Errors" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-warning-sign(ng-if = "vc.pendingActions.warnings[variant.sku].gruppoPrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.warnings[variant.sku].gruppoPrice)}}" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-remove(ng-if = "vc.pendingActions.errors[variant.sku].gruppoPrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.errors[variant.sku].gruppoPrice)}}" tooltip-placement="right")
+                            .row
+                                .col-xs-4
+                                    label.price Flash:&nbsp;&nbsp 
+                                .col-xs-8
+                                    input.price.form-control.slc(type="text", placeholder = "{{variant.offers[0].flashPrice | currency}}" ng-model="variant.flashModel" ng-blur="vc.validateFieldChange(variant.sku, 'flashPrice', variant.flashModel, variant.offers[0].flashPrice, firstSwatch)" id="{{variant.sku + 'flashPrice'}}")
+                                    span &nbsp;
+                                    span.glyphicon.glyphicon-ok(ng-if = "!vc.pendingActions.errors[variant.sku].flashPrice && !vc.pendingActions.warnings[variant.sku].flashPrice && vc.pendingActions.skuActions[variant.sku].flashPrice" tooltip = "No Errors" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-warning-sign(ng-if = "vc.pendingActions.warnings[variant.sku].flashPrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.warnings[variant.sku].flashPrice)}}" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-remove(ng-if = "vc.pendingActions.errors[variant.sku].flashPrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.errors[variant.sku].flashPrice)}}" tooltip-placement="right")
+                td.col-xs-1
+                    .row
+                        .dropdown(id="{{variant.sku + 'catalogAssignments'}}")
+                            button.btn.btn-default.dropdown-toggle.catalog-dropdown(active type='button' data-toggle='dropdown' aria-haspopup='true' aria-extended-expanded='true')
+                                span {{variant.catalogModel.length}}
+                                span &nbsp&nbsp
+                                span.caret
+                            ul.dropdown-menu
+                                li(ng-repeat='(catalog, title) in pd.catalogs' value = '{{catalog}}' ng-click='vc.toggleCatalog(firstSwatch, variant, catalog)')
+                                    a(ng-class='{"catalogAssigned": variant.catalogModel.indexOf(catalog) !== -1}') {{catalog}}
+                td.col-xs-1
+                    select.row.form-control.selectpicker(id="{{variant.sku + 'season'}}"  ng-model= "variant.seasonModel" ng-options = "value for (key, value) in pd.seasons" ng-change = "vc.validateFieldChange(variant.sku, 'season', variant.seasonModel, variant.season, firstSwatch)")
+                    select.row.form-control.selectpicker(id="{{variant.sku + 'year'}}"  ng-model= "variant.yearModel"  ng-options="n for n in [] | range:(variant.year-2):(pd.year+2)" ng-change = "vc.validateFieldChange(variant.sku, 'year', variant.yearModel, variant.year, firstSwatch)")
+                td.col-xs-1
+                    span {{variant.qoh}}
+                td.col-xs-2.form-group
+                    select.row.form-control.selectpicker(id="{{variant.sku + 'selloutCode'}}"  ng-model= "variant.selloutModel" ng-options = "key as value for (key, value) in pd.selloutCodes" ng-change = "vc.validateFieldChange(variant.sku, 'selloutCode', variant.selloutModel, variant.offers[0].selloutCodeId, firstSwatch)")
+        tbody(ng-if = "pd.skuData.isSkuLevel", ng-repeat = "firstSwatch in vc.sortedVariants |orderBy:'mostRecentSeason':true")
+            tr.row(ng-repeat = "variant in firstSwatch.variants | filter: vc.userFilter | filter: {season: vc.seasonFilter} | filter: {year: vc.yearFilter}")
+                td.col-xs-2(ng-click='$event.stopPropagation()')
+                    input(type="checkbox" ng-model="firstSwatch.check" ng-click="vc.toggleCheckbox(firstSwatch.check, firstSwatch)")
+                    span &nbsp&nbsp
+                    ul.img-list(ng-if='pd.getImage(firstSwatch.identifier)' ng-click='vc.openModal(firstSwatch.variants[0].style, firstSwatch.identifier, pd.getImage(firstSwatch.identifier), pd.images[firstSwatch.identifier])')
+                        li
+                            a
+                                img(ng-src = "{{pd.getImage(firstSwatch.identifier)}}" width='110' height='110')
+                                span.text-content
+                                    span View Images
+                td.col-xs-2
+                    .row {{variant.sku}}
+                    .row {{variant.axis1Value}}
+                    .row {{variant.axis2Value}}
+                    .row Vendor Sku: {{variant.vendorSku}}
+                td.col-xs-3.price
+                    fieldset
+                        div.form-group
+                            .row
+                                .col-xs-4
+                                    label.price WS:
+                                .col-xs-8
+                                    input.price.form-control.slc(disabled type="text", placeholder = "{{variant.offers[0].wholesalePrice | currency}}" ng-model="variant.wholesaleModel" ng-blur="vc.CvalidateFieldhange(variant.sku, 'wholesalePrice', variant.wholesaleModel, variant.offers[0].wholesalePrice, firstSwatch)" id="{{variant.sku + 'wholesalePrice'}}")
+                                    span &nbsp;
+                                    span.glyphicon.glyphicon-ok(ng-show = "!vc.pendingActions.errors[variant.sku].wholesalePrice && !vc.pendingActions.warnings[variant.sku].wholesalePrice && vc.pendingActions.skuActions[variant.sku].wholesalePrice" tooltip = "No Errors" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-warning-sign(ng-show = "vc.pendingActions.warnings[variant.sku].wholesalePrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.warnings[variant.sku].wholesalePrice)}}" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-remove(ng-show = "vc.pendingActions.errors[variant.sku].wholesalePrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.errors[variant.sku].wholesalePrice)}}" tooltip-placement="right")
+                            .row
+                                .col-xs-4
+                                    label.price Reg:
+                                .col-xs-8
+                                    input.price.form-control.slc(disabled type="text", placeholder = "{{variant.offers[0].price | currency}}" ng-model="variant.regularModel" ng-blur="vc.validateFieldChange(variant.sku, 'regularPrice', variant.regularModel, variant.offers[0].price, firstSwatch)" id="{{variant.sku + 'regularPrice'}}")
+                                    span &nbsp;
+                                    span.glyphicon.glyphicon-ok(ng-show = "!vc.pendingActions.errors[variant.sku].regularPrice && !vc.pendingActions.warnings[variant.sku].regularPrice && vc.pendingActions.skuActions[variant.sku].regularPrice" tooltip = "No Errors" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-warning-sign(ng-show = "vc.pendingActions.warnings[variant.sku].regularPrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.warnings[variant.sku].regularPrice)}}" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-remove(ng-show = "vc.pendingActions.errors[variant.sku].regularPrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.errors[variant.sku].regularPrice)}}" tooltip-placement="right")
+                            .row
+                                .col-xs-4
+                                    label.price Sale:
+                                .col-xs-8
+                                    input.price.form-control.slc(type="text", placeholder = "{{variant.offers[0].salePrice | currency}}" ng-model="variant.saleModel" ng-blur="vc.validateFieldChange(variant.sku, 'salePrice', variant.saleModel, variant.offers[0].salePrice, firstSwatch)" id="{{variant.sku + 'salePrice'}}")
+                                    span &nbsp;
+                                    span.glyphicon.glyphicon-ok(ng-show = "!vc.pendingActions.errors[variant.sku].salePrice && !vc.pendingActions.warnings[variant.sku].salePrice && vc.pendingActions.skuActions[variant.sku].salePrice" tooltip = "No Errors" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-warning-sign(ng-show = "vc.pendingActions.warnings[variant.sku].salePrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.warnings[variant.sku].salePrice)}}" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-remove(ng-show = "vc.pendingActions.errors[variant.sku].salePrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.errors[variant.sku].salePrice)}}" tooltip-placement="right")
+                            .row
+                                .col-xs-4
+                                    label.price Clearance:
+                                .col-xs-8
+                                    input.price.form-control.slc(type="text", placeholder = "{{variant.offers[0].clearancePrice | currency}}" ng-model="variant.clearanceModel" ng-blur="vc.validateFieldChange(variant.sku, 'clearancePrice', variant.clearanceModel, variant.offers[0].clearancePrice, firstSwatch)" id="{{variant.sku + 'clearancePrice'}}")
+                                    span &nbsp;
+                                    span.glyphicon.glyphicon-ok(ng-show = "!vc.pendingActions.errors[variant.sku].clearancePrice && !vc.pendingActions.warnings[variant.sku].clearancePrice && vc.pendingActions.skuActions[variant.sku].clearancePrice" tooltip = "No Errors" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-warning-sign(ng-show = "vc.pendingActions.warnings[variant.sku].clearancePrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.warnings[variant.sku].clearancePrice)}}" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-remove(ng-show = "vc.pendingActions.errors[variant.sku].clearancePrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.errors[variant.sku].clearancePrice)}}" tooltip-placement="right")
+                            .row
+                                .col-xs-4
+                                    label.price Gruppo:
+                                .col-xs-8
+                                    input.price.form-control.slc(type="text", placeholder = "{{variant.offers[0].gruppoPrice | currency}}" ng-model="variant.gruppoModel" ng-blur="vc.validateFieldChange(variant.sku, 'gruppoPrice', variant.gruppoModel, variant.offers[0].gruppoPrice, firstSwatch)" id="{{variant.sku + 'gruppoPrice'}}")
+                                    span &nbsp;
+                                    span.glyphicon.glyphicon-ok(ng-if = "!vc.pendingActions.errors[variant.sku].gruppoPrice && !vc.pendingActions.warnings[variant.sku].gruppoPrice && vc.pendingActions.skuActions[variant.sku].gruppoPrice" tooltip = "No Errors" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-warning-sign(ng-if = "vc.pendingActions.warnings[variant.sku].gruppoPrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.warnings[variant.sku].gruppoPrice)}}" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-remove(ng-if = "vc.pendingActions.errors[variant.sku].gruppoPrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.errors[variant.sku].gruppoPrice)}}" tooltip-placement="right")
+                            .row
+                                .col-xs-4
+                                    label.price Flash:
+                                .col-xs-8
+                                    input.price.form-control.slc(type="text", placeholder = "{{variant.offers[0].flashPrice | currency}}" ng-model="variant.flashModel" ng-blur="vc.validateFieldChange(variant.sku, 'flashPrice', variant.flashModel, variant.offers[0].flashPrice, firstSwatch)" id="{{variant.sku + 'flashPrice'}}")
+                                    span &nbsp;
+                                    span.glyphicon.glyphicon-ok(ng-if = "!vc.pendingActions.errors[variant.sku].flashPrice && !vc.pendingActions.warnings[variant.sku].flashPrice && vc.pendingActions.skuActions[variant.sku].flashPrice" tooltip = "No Errors" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-warning-sign(ng-if = "vc.pendingActions.warnings[variant.sku].flashPrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.warnings[variant.sku].flashPrice)}}" tooltip-placement="right")
+                                    span.glyphicon.glyphicon-remove(ng-if = "vc.pendingActions.errors[variant.sku].flashPrice" tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.errors[variant.sku].flashPrice)}}" tooltip-placement="right")
+                td.col-xs-1
+                    .row
+                        .dropdown(id="{{variant.sku + 'catalogAssignments'}}")
+                            button.btn.dropdown-toggle.catalog-dropdown(type='button' data-toggle='dropdown' aria-haspopup='true' aria-extended-expanded='true')
+                                span {{variant.catalogModel.length}}
+                                span &nbsp&nbsp
+                                span.caret
+                            ul.dropdown-menu
+                                li(ng-repeat='(catalog, title) in pd.catalogs' value = '{{catalog}}' ng-click='vc.toggleCatalog(firstSwatch, variant, catalog)')
+                                    a(ng-class='{"catalogAssigned": variant.catalogModel.indexOf(catalog) !== -1}') {{catalog}}
+                td.col-xs-1
+                    select.row.form-control.selectpicker(id="{{variant.sku + 'season'}}"  ng-model= "variant.seasonModel" ng-options = "value for (key, value) in pd.seasons" ng-change = "vc.validateFieldChange(variant.sku, 'season', variant.seasonModel, variant.season, firstSwatch)")
+                    select.row.form-control.selectpicker(id="{{variant.sku + 'year'}}"  ng-model= "variant.yearModel"  ng-options="n for n in [] | range:(variant.year-2):(pd.year+2)" ng-change = "vc.validateFieldChange(variant.sku, 'year', variant.yearModel, variant.year, firstSwatch)")
+                td.col-xs-1
+                    span {{variant.qoh}}
+                td.col-xs-2.form-group
+                    select.row.form-control.selectpicker(id="{{variant.sku + 'selloutCode'}}"  ng-model= "variant.selloutModel" ng-options = "key as value for (key, value) in pd.selloutCodes" ng-change = "vc.validateFieldChange(variant.sku, 'selloutCode', variant.selloutModel, variant.offers[0].selloutCodeId, firstSwatch)" parse)

@@ -1,0 +1,82 @@
+div.row(ng-show = "vc.Object.keys(vc.pendingActions.skuActions).length !== 0 || vc.Object.keys(vc.massActions.skuActions).length !== 0")
+   table.table.table-hover.col-xs-12
+      thead
+         tr.row
+            th.col-xs-1 Status
+            th.col-xs-2 Sku
+            th.col-xs-2 Field
+            th.col-xs-2 Original Value
+            th.col-xs-2 New Value
+            th.col-xs-1 Discount
+            th.col-xs-1 Margin
+            th.col-xs-1
+      tbody(ng-repeat="(sku, errors) in vc.pendingActions.errors")
+         tr.row(ng-repeat="(key, value) in errors" ng-click="vc.jumpToLocation(sku, key)")
+            td.col-xs-1
+               span.glyphicon.glyphicon-remove-sign(tooltip-html-unsafe = "{{vc.toList(vc.pendingActions.errors[sku][key])}}" tooltip-placement="right")
+            td.col-xs-2 {{sku}}
+            td.col-xs-2(style="text-transform: capitalize;") {{key.split('P')[0]}}
+            td.col-xs-2
+               span.break-overflow {{vc.pendingActions.skuActions[sku][key].previousValue}}
+            td.col-xs-2
+               span.break-overflow {{vc.pendingActions.skuActions[sku][key].newValue}}
+            td.col-xs-1 {{vc.pendingActions.skuActions[sku][key].percentOff | percentage: 2}}
+            td.col-xs-1 {{vc.pendingActions.skuActions[sku][key].marginPercent | percentage: 2}}
+            td.col-xs-1(ng-click="$event.stopPropagation()")
+               button.btn.btn-sm.btn-danger(ng-click="vc.deletePendingAction(sku, key, vc.pendingActions.skuActions[sku][key].swatch)") Delete
+      tbody(ng-repeat="(sku, warnings) in vc.pendingActions.warnings")
+         tr.row(ng-repeat="(key, value) in warnings" ng-click="vc.jumpToLocation(sku, key)")
+            td.col-xs-1
+               span.glyphicon.glyphicon-exclamation-sign(tooltip-html-unsafe = "{{ vc.toList(vc.pendingActions.warnings[sku][key])}}" tooltip-placement="right")
+            td.col-xs-2 {{sku}}
+            td.col-xs-2(style="text-transform: capitalize;") {{key.split('P')[0]}}
+            td.col-xs-2
+               span.break-overflow {{vc.pendingActions.skuActions[sku][key].previousValue}}
+            td.col-xs-2
+               span.break-overflow {{vc.pendingActions.skuActions[sku][key].newValue}}
+            td.col-xs-1 {{vc.pendingActions.skuActions[sku][key].percentOff | percentage: 2}}
+            td.col-xs-1 {{vc.pendingActions.skuActions[sku][key].marginPercent | percentage: 2}}
+            td.col-xs-1(ng-click="$event.stopPropagation()")
+               button.btn.btn-sm.btn-danger(ng-click="vc.deletePendingAction(sku, key, vc.pendingActions.skuActions[sku][key].swatch)") Delete
+      tbody(ng-repeat="(sku, actions) in vc.pendingActions.skuActions")
+         tr.row(ng-repeat="(key, value) in actions" ng-show="!(vc.pendingActions.errors[sku][key] || vc.pendingActions.warnings[sku][key])" ng-click="vc.jumpToLocation(sku, key)")
+            td.col-xs-1
+               span.glyphicon.glyphicon-ok-sign(tooltip = "Ready to Save." tooltip-placement="right")
+            td.col-xs-2 {{sku}}
+            td.col-xs-2(style="text-transform: capitalize;") {{key.split('P')[0]}}
+            td.col-xs-2
+               span.break-overflow {{vc.pendingActions.skuActions[sku][key].previousValue}}
+            td.col-xs-2
+               span.break-overflow {{vc.pendingActions.skuActions[sku][key].newValue}}
+            td.col-xs-1 {{vc.pendingActions.skuActions[sku][key].percentOff | percentage: 2}}
+            td.col-xs-1 {{vc.pendingActions.skuActions[sku][key].marginPercent | percentage: 2}}
+            td.col-xs-1(ng-click="$event.stopPropagation()")
+               button.btn.btn-sm.btn-danger(ng-click="vc.deletePendingAction(sku, key, vc.pendingActions.skuActions[sku][key].swatch)") Delete
+      tbody(ng-repeat="(key, massAction) in vc.massActions.skuActions")
+         tr.row(ng-repeat="(dateKey, change) in massAction.changes")
+            td.col-xs-1
+               span.glyphicon.glyphicon-remove-sign(ng-if="vc.Object.keys(change.errors).length !== 0" tooltip-html-unsafe = "{{vc.toErrorString(change.errors)}}" tooltip-placement="right")
+               span.glyphicon.glyphicon-exclamation-sign(ng-if="vc.Object.keys(change.warnings).length !== 0" tooltip-html-unsafe = "{{vc.toErrorString(change.warnings)}}" tooltip-placement="right")
+               span.glyphicon.glyphicon-ok-sign(ng-if="vc.Object.keys(change.errors).length === 0 && vc.Object.keys(change.warnings).length === 0" tooltip = "Ready to Save." tooltip-placement="right")
+            td.col-xs-2
+               span(tooltip-html-unsafe = "{{vc.toList(change.skus)}}" tooltip-placement="right") Skus Affected: {{change.skus.length}}
+            td.col-xs-2 {{key}}
+            td.col-xs-2
+               span.break-overflow &nbsp
+            td.col-xs-2
+               span.break-overflow {{change.newValue}}
+            td.col-xs-1  &nbsp
+            td.col-xs-1  &nbsp
+            td.col-xs-1
+               button.btn.btn-sm.btn-danger(ng-click="vc.deleteMassAction(key, dateKey)") Delete
+   div.col-xs-2.pull-right(style='padding-bottom: 30px')
+      .row
+         .col-xs-6
+            .row
+               button.btn.btn-success.col-xs-11.pull-left(ng-show = "vc.Object.keys(vc.pendingActions.skuActions).length !== 0 || vc.Object.keys(vc.massActions.skuActions).length !== 0" ng-disabled="vc.Object.keys(vc.pendingActions.errors).length > 0 || vc.massActions.errors > 0" ng-click="vc.save()") Save
+         .col-xs-6
+            .row
+               button.btn.btn-danger.col-xs-11.pull-right(ng-show = "vc.Object.keys(vc.pendingActions.skuActions).length !== 0 || vc.Object.keys(vc.massActions.skuActions).length !== 0" ng-click="vc.cancel()") Cancel
+   hr
+
+

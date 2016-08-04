@@ -1,0 +1,44 @@
+div.-inside-section.row
+    div.col-xs-4
+        h5 Copy Treatment:
+    div.col-xs-4
+        h5 Image Treatment:
+div.-inside-section
+    div.row
+        div.col-xs-8
+            div
+                h5 Bottom Line
+                p {{pd.content.PrintProduct[0].BottomLine}}
+                hr
+            div(ng-if='pd.content.PrintProduct[0].CompetitiveCyclistBottomLine')
+                h5 Competitive Cyclist Bottom Line
+                p {{pd.content.PrintProduct[0].CompetitiveCyclistBottomLine}}
+                hr
+            div
+                h5 List Description
+                p {{pd.content.PrintProduct[0].ListDescription}}
+                hr
+            div
+                h5 Detail Description
+                p(ng-bind-html = "pd.content.PrintProduct[0].DetailDescription")
+                hr
+            div(ng-if='pd.content.PrintProduct[0].CompetitiveCyclistDescription')
+                h5 Competitive Cyclist Description
+                p(ng-bind-html = "pd.content.PrintProduct[0].CompetitiveCyclistDescription")
+                hr
+            div
+                h5 Bullet Points
+                ul
+                    li(ng-repeat = "bullet in pd.content.PrintProduct[0].BulletPoint")
+                        span {{bullet}}
+            br
+        div.col-xs-4
+            h5 Tech Specs
+            table.table
+                tbody
+                    tr(ng-repeat="spec in pd.content.PrintProduct[0].Attribute")
+                        td {{spec.Label}}
+                        td
+                            ul
+                                li(ng-repeat="detail in spec.ValueArray")
+                                    span(ng-repeat="value in detail.Value", ng-show="!!value.ValueID") {{value.TextValue}}

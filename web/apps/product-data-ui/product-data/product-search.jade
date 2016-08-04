@@ -1,0 +1,29 @@
+block styles
+    link(rel='stylesheet', href='/stylesheets/product.css')
+    link(rel='stylesheet', href='/stylesheets/pd.css')
+
+div.container(ng-controller='ProductSearchController as ps')
+    search
+    .row.pad-top(ng-show='ps.searchResults.length == 0')
+        .col-xs-12
+            error
+
+    .row.pad-top(ng-show='ps.searchResults.length > 0')
+        .col-xs-12
+            table.table.table-condensed.table-hover
+                thead
+                    tr
+                        th Style
+                        th Title
+                        th Brand
+                        th QOH
+                tbody
+                    tr(ng-repeat="searchResult in ps.searchResults", ng-click="ps.productClick(searchResult.style)")
+                        td {{searchResult.style}}
+                        td {{searchResult.title}}
+                        td {{searchResult.brandName}}
+                        td
+
+
+
+

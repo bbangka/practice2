@@ -1,0 +1,221 @@
+/* app css stylesheet */
+
+.fill-height {
+    height:100%;
+    overflow-y:auto;
+}
+
+.sidebar {
+    border-right:1px solid #AAAAAA;
+    background-color:#f3f3f3;
+    box-shadow: 0px 3px 3px #888888;
+    /*border-radius:4px;*/
+    /*box-shadow: outset 0 1px 1px rgba(0, 0, 0, 0.05);*/
+}
+
+.logo {
+    display: block;
+    float: left;
+    padding: 5px 160px 5px 5px;
+    font-size: 20px;
+    font-weight: 200;
+    color: #ffffff;
+}
+
+.logo:hover {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.tab-anchor:hover {
+    text-decoration: none;
+}
+
+.logout {
+    color: #AAAAAA;
+    padding: 20px 20px 0px 0px;
+}
+
+.logout > a {
+    color: #FFFFFF;
+}
+
+/* inbox styles */
+
+#inbox_accordion { }
+#inbox_accordion .accordion-group {
+    background-color:white;
+}
+
+.pad-right {
+    margin-right:5px;
+}
+
+.pad-left {
+    margin-left: 5px;
+}
+
+.pad-bottom {
+    margin-bottom:5px;
+}
+
+.pad-top {
+    margin-top:5px;
+}
+
+.header {
+    border: 1px solid #AAAAAA;
+    background-color: #f3f3f3;
+    border-radius:5px;
+    padding:5px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.header-warning {
+    color: #c09853;
+    background-color: #fcf8e3;
+    border-color: #fbeed5;
+}
+
+.header-error {
+    color: #b94a48;
+    background-color: #f2dede;
+    border-color: #eed3d7;
+}
+
+.body {
+    border: 1px solid #AAAAAA;
+    background-color: #ffffff;
+    border-radius:5px;
+    padding: 5px;
+    margin: 5px;
+}
+
+.contained {
+    border: 1px solid #999999;
+    padding:5px;
+    margin:5px;
+}
+
+.span-icon {
+    width:15px;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.waiting {
+    cursor: wait;
+}
+
+.error {
+    color: #FF0000
+}
+
+.title {
+    color:#f5f5f5;
+    font-size: 20px;
+}
+
+.footer {
+    color:#f5f5f5;
+    background-color:#000000;
+    font-size:12px;
+    padding:5px;
+}
+/* Styles go here */
+.popover {
+    max-width: 360px;
+}
+
+#progress_bar {
+    background: #009900;
+    width:0%;
+}
+
+#progress_bar .loading{
+    opacity: 1.0;
+    background: #009900;
+}
+
+#progress_bar .percent {
+    background: #009900;
+}
+
+.SuccessStyle {
+    color:#00ff00;
+}
+
+.FailStyle {
+    color:#AA1111;
+}
+
+.typeahead {
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.gridStyle {
+    border: 1px solid rgb(212,212,212);
+    width: 500px;
+    height: 300px;
+}
+
+.inline {
+    display:inline-block;
+}
+
+.css-form {
+}
+
+.css-form input.ng-invalid.ng-dirty {
+    border: 1px solid red;
+    background: #FEEFB3
+}
+
+
+
+.help-block{
+    font-size: smaller;
+    font-style: italic;
+    padding-left: 5px;
+}
+
+/*
+ * Makes sure altertify.js log messages are displayed
+ * on the top of the page and not on the bottom.
+ .alertify-logs {
+    top: 100px;
+    bottom: 0px;
+    width: 350px;
+}
+*/
+
+.alertify-message {
+    font-size: large;
+    font-family: "Helvetica Neue Light", "Lucida Grande", "Calibri", "Arial", sans-serif;
+    font-weight: bold;
+}
+
+.font-md-x10 {
+    font-size: 140px;
+}
+
+.font-md-x2 {
+    font-size: 28px;
+}
+
+.avatar {
+    margin-top:10px;
+    margin-left: 10px;
+}
+
+.avatar img {
+    -webkit-border-radius:10px 10px 10px 10px;
+    border-radius:10px 10px 10px 10px;
+    margin-right: 10px;
+}
+

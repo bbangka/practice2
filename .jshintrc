@@ -1,0 +1,28 @@
+{
+    "bitwise": false,
+    "camelcase": false,
+    "curly": true,
+    "eqeqeq": true,
+    "forin": true,
+    "immed": true,
+    "latedef": "nofunc",
+    "newcap": true,
+    "noarg": true,
+    "noempty": true,
+    "nonew": true,
+    "strict": false,
+    "sub": true,
+    "undef": false,
+    "unused": false,
+    "loopfunc": false,
+    "boss": true,
+    "eqnull": true,
+    "node": true,
+    "quotmark": "single",
+    "gcl": true,
+    "trailing": true,
+    "globals": {
+        "angular": true,
+        "sprintf": true
+    }
+}

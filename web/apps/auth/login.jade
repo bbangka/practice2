@@ -1,0 +1,55 @@
+extends ../layout
+
+block styles
+    link(rel="stylesheet", href="stylesheets/login.css")
+
+block content
+    div(ng-controller="LoginCtrl").container-fluid
+        div.row
+            div.col-md-12
+                div.col-md-offset-6
+                    div(style="padding-top:100px")
+                        div.row
+                            div.col-md-7
+                                div.panel.panel-default.login-panel
+                                    div.panel-body
+                                        form(name="loginForm",role="form", novalidate)
+                                            div.page-header(style="padding-bottom: 0px; margin: 0px")
+                                                table(width="100%")
+                                                    tr
+                                                        td: h3 X-Roads
+                                                        td(style="text-align:right")
+                                                            img(src="images/loader.gif", ng-show="loading")
+                                            div(style="margin-bottom: 5px; text-align: right;")
+                                                    small(ng-show="recommendedFacility").facility-label Facility: {{recommendedFacility.name}}
+                                                    small(ng-hide="recommendedFacility").facility-label Facility: {{preferredFacility.name}}
+                                            div.form-group(ng-class="{'has-error':loginForm.username.$invalid && loginForm.username.$dirty}")
+                                                label(for="username") User Name: *
+                                                input(type="text", name="username", placeholder="User Name", ng-model="username", autofocus, required).form-control
+                                                span(ng-show="loginForm.username.$invalid && loginForm.username.$dirty").help-block
+                                                    | Provide your user name.
+                                            div.form-group(ng-class="{'has-error':loginForm.password.$invalid && loginForm.password.$dirty}")
+                                                label(for="password") Password: *
+                                                input(type="password", name="password", placeholder="Password", ng-model="password", required).form-control
+                                                span(ng-show="loginForm.password.$invalid && loginForm.password.$dirty").help-block
+                                                    | Provide a valid password.
+                                            div.form-group(ng-hide="recommendedFacility",ng-class="{'has-error':loginForm.preferredFacility.$invalid && loginForm.preferredFacility.$dirty}")
+                                                label(for="preferredFacility") Facility: *
+                                                select(name="preferredFacility",ng-model="preferredFacility", ng-options="facility.name for facility in facilities", required).form-control
+                                            div.form-group
+                                                table(width="100%")
+                                                    tr
+                                                        td
+                                                            div.checkbox
+                                                                label
+                                                                    input(type="checkbox", ng-model="remember")
+                                                                    span Remember me
+                                                        td(style="text-align:right")
+                                                            button(type="submit", ng-disabled="authenticating", ng-click="login(loginForm.$valid)").btn.btn-charlie.pad-right Sign in
+                                            div.row
+                                                div.col-md-12
+                                                    small(ng-show="info") {{info.message}}
+//--libraries
+block scripts
+    script(src="apps/auth/LoginCtrl.js")
+    script(src="scripts/facilities.js")

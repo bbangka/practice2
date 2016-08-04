@@ -1,0 +1,55 @@
+.row
+    form
+        div.col-xs-12.form-group
+            label Default Catalog:
+            select.form-control.selectpicker(ng-model= "pd.skuData.defaultCatalog" ng-options = "key as value for (key, value) in pd.catalogs" disabled)
+        div.col-xs-4.form-group
+            label Product Group:
+            select.form-control.selectpicker(data-live-search="true" disabled)
+                option {{pd.skuData.prodGroupName}}
+        div.col-xs-4.form-group
+            label Brand:
+            select.form-control.selectPicker(data-live-search="true" disabled)
+                option {{pd.skuData.brandName}}
+        div.col-xs-4.form-group
+            label Gender:
+            select.form-control.selectpicker(disabled)
+                option {{pd.skuData.gender}}
+        div.col-xs-4.form-group
+            label Product Status:
+            select.form-control.selectpicker(disabled)
+                option(ng-if= "pd.skuData.inactive") Inactive
+                option(ng-if= "!pd.skuData.inactive") Active
+        div.col-xs-4
+            label Merch Division:
+            select.form-control.selectpicker(disabled)
+                option {{pd.skuData.merchName}}
+        div.clearfix
+        div.col-xs-2.form-group
+            label OEM:
+            div.radios
+                label
+                    input(type="radio", name="oem" ng-model="pd.skuData.oem" ng-value="false" disabled)
+                    span &nbsp;No&nbsp;&nbsp;
+                label
+                    input(type="radio", name="oem" ng-model="pd.skuData.oem" ng-value="true" disabled)
+                    span &nbsp;Yes&nbsp;&nbsp;
+        div.col-xs-2.form-group
+            label Conveyable:
+            div.radios
+
+                label
+                    input(type="radio" name="conveyable" ng-model="pd.skuData.conveyable" ng-value="false" disabled)
+                    span &nbsp;No&nbsp;&nbsp;
+                label
+                    input(type="radio" name="conveyable" ng-model="pd.skuData.conveyable" ng-value="true" disabled)
+                    span &nbsp;Yes&nbsp;&nbsp;
+        div.col-xs-2.form-group
+            label Not Taxable?
+            div.radios
+                label
+                    input(type="radio" name="tax" ng-model="pd.skuData.nonTaxable" ng-value="false" disabled)
+                    span &nbsp;No&nbsp;&nbsp;
+                label
+                    input(type="radio" name="tax" ng-model="pd.skuData.nonTaxable" ng-value="true" disabled)
+                    span &nbsp;Yes&nbsp;&nbsp;

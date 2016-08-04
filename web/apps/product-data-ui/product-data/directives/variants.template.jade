@@ -1,0 +1,173 @@
+change-summary
+
+.row
+    input.col-xs-2(ng-model="vc.userFilter", type="text", placeholder="Filter Variants (e.g. Blue)")
+    select.filter-form.form-control.selectpicker.col-xs-4(ng-model= "vc.seasonFilter")
+        option(value='') Filter by Season
+        option(ng-repeat = "value in pd.seasons") {{value}}
+    select.filter-form.form-control.selectpicker.col-xs-4(ng-model= "vc.yearFilter")
+        option(value='') Filter by Year
+        option(ng-repeat = "value in vc.years") {{value}}
+    span.glyphicon.glyphicon-remove(ng-click='vc.clearFilter()' style='color: grey;')
+    button.edit-mode-button.btn.btn-info.pull-right.col-xs-2(ng-click='pd.changeEditMode()' ng-hide = "pd.showVariants==='loading'" ng-if='pd.access') Edit
+
+br
+
+.row
+    table.table.table-hover.col-xs-12
+        thead
+            tr.row
+                th.col-xs-2 Image/Vendor SKU
+                th.col-xs-2
+                    .row SKU
+                th.col-xs-3
+                    .row
+                        .col-xs-12 Price
+                th.col-xs-1
+                    .row Catalog
+                th.col-xs-1
+                    .row Season
+                th.col-xs-1 QOH
+                th.col-xs-2
+                    .row SO Code
+        tbody.pointer-hover(ng-if = "!pd.skuData.isSkuLevel", ng-repeat = "firstSwatch in vc.sortedVariants |orderBy:'mostRecentSeason':true")
+            tr.colorHeader.row(ng-click="firstSwatch.isOpen = !firstSwatch.isOpen" ng-show="(firstSwatch.variants | filter:vc.userFilter | filter: {season: vc.seasonFilter} | filter: {year: vc.yearFilter}).length" )
+                td.col-xs-2(ng-click='$event.stopPropagation()')
+                    ul.img-list(ng-if='pd.getImage(firstSwatch.identifier)' ng-click='vc.openModal(firstSwatch.variants[0].style, firstSwatch.identifier, firstSwatch.swatch, pd.images[firstSwatch.identifier])')
+                        li
+                            a
+                                img(ng-src = "{{pd.getImage(firstSwatch.identifier)}}" width='110' height='110')
+                                span.text-content
+                                    span View Images
+                td.col-xs-2(ng-if = " !pd.skuData.axis2.swatch")
+                    .row {{firstSwatch.variants[0].sku.substring(0, firstSwatch.variants[0].sku.lastIndexOf("-"))}}
+                    .row {{firstSwatch.variants[0].axis1Value}}
+                    .row
+                        span Sizes:&nbsp
+                        span.break-overflow(ng-repeat = "variant in firstSwatch.variants | orderBy: vc.convertToSizeValue") {{variant.axis2Value}}
+                            span(ng-show = "!$last") ,&nbsp
+                td.col-xs-2(ng-if = "!pd.skuData.axis1.swatch && pd.skuData.axis2.swatch")
+                    .row {{firstSwatch.variants[0].axis2Value}}
+                    .row
+                        span Colors:&nbsp
+                        span.break-overflow(ng-repeat = "variant in firstSwatch.variants") {{variant.axis1Value}}
+                            span(ng-show = "!$last") ,&nbsp
+                td.col-xs-3
+                    .row
+                        .col-xs-4 WS:&nbsp;&nbsp 
+                        .col-xs-8
+                            span {{firstSwatch.minWSPrice | currency}}&nbsp 
+                            span(ng-show="firstSwatch.minWSPrice != firstSwatch.maxWSPrice") - {{firstSwatch.maxWSPrice | currency}} 
+                    .row
+                        .col-xs-4 Reg:&nbsp;&nbsp 
+                        .col-xs-8
+                            span {{firstSwatch.minPrice | currency}}&nbsp 
+                            span(ng-show="firstSwatch.minPrice != firstSwatch.maxPrice") - {{firstSwatch.maxPrice | currency}} 
+                    .row
+                        .col-xs-4 Sale:&nbsp;&nbsp 
+                        .col-xs-8
+                            span {{firstSwatch.minSPrice | currency}}&nbsp 
+                            span(ng-show="firstSwatch.minSPrice != firstSwatch.maxSPrice") - {{firstSwatch.maxSPrice | currency}}
+                    .row
+                        .col-xs-4 Clearance:&nbsp;&nbsp 
+                        .col-xs-8
+                            span {{firstSwatch.minCPrice | currency}}&nbsp 
+                            span(ng-show="firstSwatch.minCPrice != firstSwatch.maxCPrice") - {{firstSwatch.maxCPrice | currency}} 
+                    .row
+                        .col-xs-4 Gruppo:&nbsp;&nbsp 
+                        .col-xs-8
+                            span {{firstSwatch.minGPrice | currency}}&nbsp 
+                            span(ng-show="firstSwatch.minGPrice != firstSwatch.maxGPrice") - {{firstSwatch.maxGPrice | currency}} 
+                    .row
+                        .col-xs-4 Flash:&nbsp;&nbsp 
+                        .col-xs-8
+                            span {{firstSwatch.minFPrice | currency}}&nbsp 
+                            span(ng-show="firstSwatch.minFPrice != firstSwatch.maxFPrice") - {{firstSwatch.maxFPrice | currency}} 
+                td.col-xs-1
+                    .row(ng-repeat="catalogs in firstSwatch.catalogs")
+                        span(ng-if= "catalogs=='competitivecyclist'") cc
+                        span(ng-if="catalogs!='competitivecyclist' ") {{catalogs}}
+                td.col-xs-1
+                    .row(ng-repeat="season in firstSwatch.seasons |orderBy:vc.convertToNumber:true") {{season}}
+                td.col-xs-1 {{firstSwatch.qoh}}
+                td.col-xs-2
+                    .row(ng-repeat="code in firstSwatch.soCode") {{pd.selloutCodes[code]}}
+            tr.row(ng-repeat = "variant in firstSwatch.variants | filter:vc.userFilter | filter: {season: vc.seasonFilter} | filter: {year: vc.yearFilter} | orderBy:'sizing'" ng-if="firstSwatch.isOpen")
+                td.col-xs-2
+                    span {{variant.vendorSku}}
+                td.col-xs-2(ng-show = " !pd.skuData.axis2.swatch")
+                    .row {{variant.axis2Value}}
+                td.col-xs-2(ng-show = "!pd.skuData.axis1.swatch && pd.skuData.axis2.swatch")
+                    .row {{variant.axis1Value}}
+                    .row {{variant.sku}}
+                td.col-xs-3
+                    .row
+                        .col-xs-4 WS:&nbsp;&nbsp 
+                        .col-xs-8 {{variant.offers[0].wholesalePrice | currency}}
+                    .row
+                        .col-xs-4 Reg:&nbsp;&nbsp 
+                        .col-xs-8 {{variant.offers[0].price | currency}}
+                    .row
+                        .col-xs-4 Sale:&nbsp;&nbsp 
+                        .col-xs-8 {{variant.offers[0].salePrice | currency}}
+                    .row
+                        .col-xs-4 Clearance:&nbsp;&nbsp 
+                        .col-xs-8 {{variant.offers[0].clearancePrice | currency}}
+                    .row
+                        .col-xs-4 Gruppo:&nbsp;&nbsp 
+                        .col-xs-8 {{variant.offers[0].gruppoPrice | currency}}
+                    .row
+                        .col-xs-4 Flash:&nbsp;&nbsp 
+                        .col-xs-8 {{variant.offers[0].flashPrice | currency}}
+                td.col-xs-1
+                    .row(ng-repeat="catalog in variant.catalogModel")
+                        span(ng-if= "catalog=='competitivecyclist'") cc
+                        span(ng-if="catalog!='competitivecyclist' ") {{catalog}}
+                        br
+                td.col-xs-1
+                    .row {{variant.seasonModel}} - {{variant.yearModel}}
+                td.col-xs-1
+                    span {{variant.qoh}}
+                td.col-xs-2
+                    .row {{pd.selloutCodes[variant.selloutModel]}}
+        tbody(ng-if = "pd.skuData.isSkuLevel", ng-repeat = "firstSwatch in vc.sortedVariants |orderBy:'mostRecentSeason':true")
+            tr.row(ng-repeat = "variant in firstSwatch.variants | filter: vc.userFilter | filter: {season: vc.seasonFilter} | filter: {year: vc.yearFilter}")
+                td.col-xs-2(ng-click='$event.stopPropagation()')
+                    ul.img-list(ng-if='pd.getImage(firstSwatch.identifier)' ng-click='vc.openModal(firstSwatch.variants[0].style, firstSwatch.identifier, pd.getImage(firstSwatch.identifier), pd.images[firstSwatch.identifier])')
+                        li
+                            a
+                                img(ng-src = "{{pd.getImage(firstSwatch.identifier)}}" width='110' height='110')
+                                span.text-content
+                                    span View Images
+                td.col-xs-2
+                    .row {{variant.sku}}
+                    .row {{variant.axis1Value}}
+                    .row {{variant.axis2Value}}
+                    .row Vendor Sku: {{variant.vendorSku}}
+                td.col-xs-3
+                    .row
+                        .col-xs-4 WS:&nbsp;&nbsp 
+                        .col-xs-8 {{variant.offers[0].wholesalePrice | currency}}
+                    .row
+                        .col-xs-4 Reg:&nbsp;&nbsp 
+                        .col-xs-8 {{variant.offers[0].price | currency}}
+                    .row
+                        .col-xs-4 Sale:&nbsp;&nbsp 
+                        .col-xs-8 {{variant.offers[0].salePrice | currency}}
+                    .row
+                        .col-xs-4 Clearance:&nbsp;&nbsp 
+                        .col-xs-8 {{variant.offers[0].clearancePrice | currency}}
+                    .row
+                        .col-xs-4 Gruppo:&nbsp;&nbsp 
+                        .col-xs-8 {{variant.offers[0].gruppoPrice | currency}}
+                    .row
+                        .col-xs-4 Flash:&nbsp;&nbsp 
+                        .col-xs-8 {{variant.offers[0].flashPrice | currency}}
+                td.col-xs-1
+                    span(ng-repeat="catalog in variant.catalogModel")
+                        span(ng-if= "catalog=='competitivecyclist'") cc
+                        span(ng-if="catalog!='competitivecyclist' ") {{catalog}}
+                        br
+                td.col-xs-1 {{variant.season}} - {{variant.year}}
+                td.col-xs-1 {{variant.qoh}}
+                td.col-xs-2 {{pd.selloutCodes[variant.offers[0].selloutCodeId]}}

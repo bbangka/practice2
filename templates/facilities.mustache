@@ -1,0 +1,8 @@
+(function(module){
+    "use strict";
+
+    module.run(['profile', function(profile) {
+        profile.set('facilities', Object.freeze({{{facilities}}}));
+    }]);
+
+})(angular.module('product-data-ui'));

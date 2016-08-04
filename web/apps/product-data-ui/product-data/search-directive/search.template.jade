@@ -1,0 +1,18 @@
+.row.headborder
+    .col-xs-6
+        h1
+            span.glyphicon.glyphicon-picture &nbsp;
+            span Product Data Tool
+    .col-xs-6
+        form.form-inline.pull-right.search-row(ng-submit="id.searchClick(id.userInput)")
+            input.form-control(ng-model="id.userInput", type="text", placeholder="Search")
+            select.form-control(ng-model= "id.brandFilter" style='width: 150px')
+                option(value='') Filter by Brand
+                option(ng-repeat = "brand in id.brands") {{brand}}
+            button.btn.btn-success
+                span Search
+                span(ng-show="ps.loading")
+                    span &nbsp;&nbsp;
+                    img(src="../images/loader.gif")
+
+

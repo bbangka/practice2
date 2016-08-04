@@ -1,0 +1,53 @@
+extends ../layout
+
+block content
+    div.container-fluid
+        fbe-global-nav(ng-controller="NavController as vm", logout-func="vm.logoutClick()")
+        div(ng-view)
+block scripts
+    script(src="libs/fbe-ui-directives/dist/fbe-ui-directives.min.js")
+    script(src="libs/fbe-ui-directives/dist/fbe-ui-directives-tpls.min.js")
+
+    //module
+    script(src="apps/product-data-ui/product-data-ui.module.js")
+
+    script(src="apps/product-data-ui/home/home.controller.js")
+    script(src="scripts/profile.js")
+    script(src="apps/product-data-ui/route-config.js")
+    script(src="apps/product-data-ui/common/nav.controller.js")
+    script(src="apps/product-data-ui/product-data/product-data.controller.js")
+    script(src="apps/product-data-ui/product-data/variant.controller.js")
+
+
+    //product-data
+    script(src="apps/product-data-ui/product-data/product-data.controller.js")
+    script(src="apps/product-data-ui/product-data/modal.controller.js")
+    script(src="apps/product-data-ui/product-data/merch.service.js")
+    script(src="apps/product-data-ui/product-data/variant.service.js")
+    script(src="apps/product-data-ui/product-data/media.service.js")
+    script(src="apps/product-data-ui/product-data/wms.service.js")
+    script(src="apps/product-data-ui/product-data/content.service.js")
+    script(src="apps/product-data-ui/product-data/content-integration.service.js")
+    script(src="apps/product-data-ui/product-data/sizing.service.js")
+
+
+    //product-search
+    script(src="apps/product-data-ui/product-data/search.service.js")
+    script(src="apps/product-data-ui/product-data/product-search.controller.js")
+
+
+    //directives
+    script(src="apps/product-data-ui/product-data/search-directive/search.directive.js")
+    script(src="apps/product-data-ui/product-data/search-directive/search.controller.js")
+    script(src="apps/product-data-ui/product-data/directives/product-details.directive.js")
+    script(src="apps/product-data-ui/product-data/directives/variants.directive.js")
+    script(src="apps/product-data-ui/product-data/directives/error.directive.js")
+    script(src="apps/product-data-ui/product-data/directives/content.directive.js")
+    script(src="apps/product-data-ui/product-data/directives/clone-tree.directive.js")
+    script(src="apps/product-data-ui/product-data/directives/notes.directive.js")
+    script(src="apps/product-data-ui/product-data/directives/change-summary.directive.js")
+    script(src="apps/product-data-ui/product-data/edit-directives/edit-variants.directive.js")
+
+    //filters
+    script(src="apps/product-data-ui/product-data/edit-directives/range.filter.js")
+    script(src="apps/product-data-ui/product-data/edit-directives/percentage.filter.js")
